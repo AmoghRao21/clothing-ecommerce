@@ -135,7 +135,7 @@ const Wardrobe = ({ showTees }) => {
 
       <div className="relative z-10 container mx-auto px-4 py-20">
         <motion.h1
-          className=" font-nice text-6xl font-bold text-center mb-16 mt-5 bg-gradient-to-r from-yellow-200 via-yellow-500 to-gold bg-clip-text text-transparent"
+          className=" font-nice text-6xl font-bold text-center mb-16 mt-15 bg-gradient-to-r from-yellow-200 via-yellow-500 to-gold bg-clip-text text-transparent"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: showTees ? 1 : 0, y: showTees ? 0 : -50 }}
           transition={{ duration: 1, delay: 0.5 }}
