@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import logo from '../assets/LS20250601003303.png'; // Update if needed
+import { Link } from 'react-router-dom';
+import logo from '../assets/LS20250601003303.png';
 
 const ObsidianNavbar = () => {
   return (
@@ -11,7 +12,6 @@ const ObsidianNavbar = () => {
       className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-[92%] max-w-6xl px-6 sm:px-10 py-4 bg-gradient-to-br from-black/80 to-[#1a0000]/80 border border-red-900/20 rounded-full shadow-[0_0_25px_rgba(255,0,0,0.12)] backdrop-blur-md"
     >
       <div className="flex items-center justify-between text-white uppercase text-base tracking-widest font-semibold">
-        
         {/* Logo + Brand */}
         <div className="flex items-center gap-4">
           <img
@@ -26,19 +26,40 @@ const ObsidianNavbar = () => {
 
         {/* Desktop Nav Links */}
         <div className="hidden md:flex gap-10">
-          {['Home', 'Shop', 'Lookbook', 'Contact'].map((item, index) => (
-            <a
-              key={index}
-              href="#"
-              className="relative group hover:text-red-400 transition"
-            >
-              {item}
-              <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-red-500 via-orange-400 to-red-500 group-hover:w-full transition-all duration-300" />
-            </a>
-          ))}
+          <Link
+            to="/"
+            className="relative group hover:text-red-400 transition"
+          >
+            Home
+            <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-red-500 via-orange-400 to-red-500 group-hover:w-full transition-all duration-300" />
+          </Link>
+
+          <Link
+            to="#"
+            className="relative group hover:text-red-400 transition"
+          >
+            Shop
+            <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-red-500 via-orange-400 to-red-500 group-hover:w-full transition-all duration-300" />
+          </Link>
+
+          <Link
+            to="/fitfeed"
+            className="relative group hover:text-red-400 transition"
+          >
+            FitFeed
+            <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-red-500 via-orange-400 to-red-500 group-hover:w-full transition-all duration-300" />
+          </Link>
+
+          <Link
+            to="#"
+            className="relative group hover:text-red-400 transition"
+          >
+            Contact
+            <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-red-500 via-orange-400 to-red-500 group-hover:w-full transition-all duration-300" />
+          </Link>
         </div>
 
-        {/* Mobile Hamburger */}
+        {/* Mobile Hamburger (Optional: you can later make this open a menu) */}
         <div className="md:hidden">
           <button className="w-7 h-7 flex flex-col justify-between items-center focus:outline-none">
             <span className="w-full h-[2px] bg-white rounded" />
