@@ -7,6 +7,19 @@ import tee2 from '../assets/Mentalty - 2.png';
 import tee3 from '../assets/Mentalty - 1.png';
 import tee4 from '../assets/Mentalty - 2.png';
 
+// 📱 Mobile detection hook
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 640);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 640);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return isMobile;
+};
+
 const CurtainEffect = ({ isOpen, onComplete }) => {
   const curtainTransition = {
     duration: 2.2,
@@ -47,121 +60,92 @@ const CurtainEffect = ({ isOpen, onComplete }) => {
 };
 
 const Tee = ({ src, alt, index, isVisible }) => {
-  const waveVariants = {
-    wave: {
-      rotate: [-0.5, 0.5, -0.5],
-      y: [0, -2, 0],
-      transition: {
-        duration: 4 + index * 0.4,
-        repeat: Infinity,
-        ease: 'easeInOut',
-        delay: index * 0.2,
-      },
-    },
+  const getTransform = (i) => {
+    const transforms = [
+      'translateX(-260px) translateZ(-800px) rotateY(-20deg)',
+      'translateX(-130px) translateZ(-400px) rotateY(-10deg)',
+      'translateX(0px) translateZ(400px) rotateY(-3deg) rotateX(2deg)',
+      'translateX(130px) translateZ(-400px) rotateY(10deg)',
+      'translateX(260px) translateZ(-800px) rotateY(20deg)'
+    ];
+    return transforms[i] || 'translateZ(0px)';
   };
 
-  const revealVariants = {
-    hidden: {
-      opacity: 0,
-      y: 40,
-      scale: 0.9,
-      rotateX: -10,
-      rotateY: 5,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      rotateX: 0,
-      rotateY: 0,
-      transition: {
-        duration: 0.9,
-        ease: [0.25, 0.1, 0.25, 1],
-        delay: index * 0.3,
-      },
-    },
-  };
-
-  const rotateY = [-3, 0, 3, 0][index % 4];
+  const delays = [3.8, 2.8, 1.2, 2.8, 3.8];
 
   return (
     <motion.div
-      className="relative group transform-style-preserve-3d"
-      variants={revealVariants}
-      initial="hidden"
-      animate={isVisible ? 'visible' : 'hidden'}
-      whileHover={{ rotateY: rotateY + 6, rotateX: 3, scale: 1.03, transition: { duration: 0.5 } }}
-      style={{ perspective: 1200, transformStyle: 'preserve-3d', transform: `rotateY(${rotateY}deg)` }}
+      className="flex flex-col items-center"
+      initial={{ opacity: 0, transform: 'translateX(0px) translateZ(0px)' }}
+      animate={isVisible ? { opacity: 1, transform: getTransform(index) } : {}}
+      transition={{ delay: delays[index], duration: 2.4, ease: [0.22, 1, 0.36, 1] }}
+      style={{ transformStyle: 'preserve-3d' }}
     >
       <motion.div
-        className="relative rounded-xl overflow-hidden"
-        variants={waveVariants}
-        animate={isVisible ? 'wave' : 'none'}
-        style={{ boxShadow: '0 10px 30px rgba(0,0,0,0.4)', transformStyle: 'preserve-3d' }}
+        className="rounded-3xl overflow-hidden bg-white w-[200px] sm:w-[220px] md:w-[240px]"
+        whileHover={{ scale: 1.05 }}
+        style={{
+          transition: 'transform 0.4s ease-out',
+          boxShadow: index === 2 ? '0px 50px 120px rgba(255,255,255,0.12)' : '0px 10px 40px rgba(0,0,0,0.25)'
+        }}
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-red-500/20 to-transparent blur-sm transform translate-y-2 rounded-lg" />
-        <img
-          src={src}
-          alt={alt}
-          className="w-full h-auto relative z-10"
-          style={{ filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))', transform: 'translateZ(20px)' }}
-        />
-        <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-60 blur-sm" />
+        <img src={src} alt={alt} className="w-full h-auto object-cover rounded-3xl" />
       </motion.div>
     </motion.div>
   );
 };
 
 const Wardrobe = ({ showTees }) => {
+  const isMobile = useIsMobile();
+
   const teeData = [
     { src: tee1, alt: 'Mentality Lion Tee' },
     { src: tee2, alt: 'Mentality Warrior Tee' },
     { src: tee3, alt: 'Anime Dark Sword Tee' },
     { src: tee4, alt: 'Attitude Hoodie Tee' },
+    { src: tee1, alt: 'Repeat Tee' },
   ];
+
+  // Show only center 3 on mobile
+  const visibleTees = isMobile ? teeData.slice(1, 4) : teeData;
 
   return (
     <motion.div
       className="relative min-h-screen bg-black overflow-hidden"
-      initial={{ scale: 0.98 }}
-      animate={{ scale: showTees ? 1 : 0.98 }}
-      transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
+      initial={{ scale: 0.96 }}
+      animate={showTees ? { scale: 1 } : {}}
+      transition={{ duration: 1.4, ease: 'easeOut' }}
     >
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-60"
-        style={{ backgroundImage: `url(${bgImage})`, backgroundBlendMode: 'multiply' }}
+        className="absolute inset-0 bg-cover bg-center opacity-30"
+        style={{ backgroundImage: `url(${bgImage})` }}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
 
-      <div className="relative z-10 container mx-auto px-4 py-20">
+      <div className="relative z-10 py-28">
         <motion.h1
-          className=" font-nice text-6xl font-bold text-center mb-16 mt-15 bg-gradient-to-r from-yellow-200 via-yellow-500 to-gold bg-clip-text text-transparent"
+          className="font-nice text-5xl sm:text-6xl text-center font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent mb-16"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: showTees ? 1 : 0, y: showTees ? 0 : -50 }}
-          transition={{ duration: 1, delay: 0.5 }}
+          transition={{ duration: 1 }}
         >
           NEW LAUNCHES
         </motion.h1>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 max-w-7xl px-4 mx-auto">
-          {teeData.map((tee, index) => (
-            <div key={index} className="relative">
-              <div className="absolute inset-0 bg-gradient-to-b from-gray-800/20 to-black/40 rounded-2xl backdrop-blur-sm border border-gray-700/30" />
-              <div className="relative p-2 sm:p-4 lg:p-6 rounded-2xl">
-                <div className="absolute top-4 left-4 right-4 h-1 bg-gradient-to-r from-red-500 via-orange-500 to-red-500 rounded-full opacity-60" />
-                <div className="mt-8">
-                  <Tee src={tee.src} alt={tee.alt} index={index} isVisible={showTees} />
-                </div>
-              </div>
-            </div>
+        <div
+          className="flex justify-center items-end gap-2 px-4 md:px-10 lg:px-16"
+          style={{ perspective: '3000px' }}
+        >
+          {visibleTees.map((tee, index) => (
+            <Tee key={index} src={tee.src} alt={tee.alt} index={index} isVisible={showTees} />
           ))}
         </div>
 
         <motion.div
-          className="text-center mt-16"
+          className="text-center mt-14"
           initial={{ opacity: 0 }}
           animate={{ opacity: showTees ? 1 : 0 }}
-          transition={{ duration: 1, delay: 2 }}
+          transition={{ duration: 1, delay: 4 }}
         >
           <p className="text-gray-400 text-lg tracking-wider">
             PREMIUM STREETWEAR • LIMITED EDITION
@@ -177,9 +161,7 @@ const WardrobeInterface = () => {
   const [showTees, setShowTees] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setCurtainOpen(true);
-    }, 500);
+    const timer = setTimeout(() => setCurtainOpen(true), 500);
     return () => clearTimeout(timer);
   }, []);
 

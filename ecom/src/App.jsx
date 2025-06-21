@@ -3,6 +3,8 @@ import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import WardrobeInterface from './pages/WardrobeInterface';
 import ObsidianNavbar from './components/Navbar';
+import ChooseYourVibe from './pages/GenreSection';
+import TopSellers from './pages/Top';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -11,6 +13,8 @@ function App() {
     <>
       <ObsidianNavbar />
       <WardrobeInterface />
+      <ChooseYourVibe />
+      <TopSellers />
     </>
   );
 }
