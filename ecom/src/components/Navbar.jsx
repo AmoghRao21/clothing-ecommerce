@@ -35,10 +35,10 @@ const ObsidianNavbar = () => {
           </Link>
 
           <Link
-            to="#"
+            to="/customization"
             className="relative group hover:text-red-400 transition"
           >
-            Shop
+            customization
             <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-red-500 via-orange-400 to-red-500 group-hover:w-full transition-all duration-300" />
           </Link>
 

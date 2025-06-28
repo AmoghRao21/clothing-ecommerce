@@ -330,6 +330,8 @@ const FitFeed = () => {
           ))}
         </div>
 
+
+
         {posts.length === 0 && (
           <div className="text-center py-20">
             <div className="text-8xl mb-6">👗</div>

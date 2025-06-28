@@ -1,12 +1,13 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import ObsidianNavbar from './components/Navbar';
-import WardrobeInterface from './pages/WardrobeInterface';
-import ChooseYourVibe from './pages/GenreSection';
-import TopSellers from './pages/Top';
-import FitFeed from './pages/FitFeed';
-import DarkELKChatbot from './components/Chatbot';
+import ObsidianNavbar from "./components/Navbar";
+import WardrobeInterface from "./pages/WardrobeInterface";
+import ChooseYourVibe from "./pages/GenreSection";
+import TopSellers from "./pages/Top";
+import FitFeed from "./pages/FitFeed";
+import DarkELKChatbot from "./components/Chatbot";
+import TShirtCustomizer from "./pages/Customization";
 
 function App() {
   return (
@@ -25,7 +26,12 @@ function App() {
           }
         />
         <Route path="/fitfeed" element={<FitFeed />} />
-        <Route path="*" element={<div className="text-white p-10">404 - Page Not Found</div>} />
+        <Route path="/customization" element={<TShirtCustomizer />} />
+
+        <Route
+          path="*"
+          element={<div className="text-white p-10">404 - Page Not Found</div>}
+        />
       </Routes>
     </Router>
   );
