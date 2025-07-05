@@ -9,8 +9,6 @@ import FitFeed from "./pages/FitFeed";
 import DarkELKChatbot from "./components/Chatbot";
 import TShirtCustomizer from "./pages/Customization";
 import ShopPage from "./pages/ShopPage";
-import ProductDetail from './pages/ProductDetail';
-import CartPage from "./pages/CartPage";
 
 function App() {
   return (
@@ -31,8 +29,6 @@ function App() {
         <Route path="/fitfeed" element={<FitFeed />} />
         <Route path="/customization" element={<TShirtCustomizer />} />
         <Route path="/shop" element={<ShopPage />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/cart-page" element={<CartPage />} />
         <Route
           path="*"
           element={<div className="text-white p-10">404 - Page Not Found</div>}

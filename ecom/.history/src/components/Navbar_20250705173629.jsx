@@ -1,33 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../assets/LS20250601003303.png';
 
 const ObsidianNavbar = () => {
   const location = useLocation();
-  const [showNavbar, setShowNavbar] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY < lastScrollY) {
-        setShowNavbar(true);
-      } else {
-        setShowNavbar(false);
-      }
-      setLastScrollY(window.scrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  // Show/hide navbar only on non-shop pages (optional)
+  const isShop = location.pathname === '/shop' || location.pathname.includes('/product');
 
   return (
-    <nav
-      className={`fixed top-6 left-1/2 transform -translate-x-1/2 w-[92%] max-w-6xl z-50 rounded-full shadow-[0_0_25px_rgba(255,0,0,0.12)] transition-transform duration-300 ${
-        showNavbar ? 'translate-y-0' : '-translate-y-full'
-      } bg-gradient-to-br from-black/80 to-[#1a0000]/80 border border-red-900/20 backdrop-blur-md`}
+    <motion.nav
+      className={`group fixed top-0 left-0 w-full z-50 transition-transform duration-500 ${
+        isShop ? 'hover:translate-y-0 -translate-y-[90%]' : 'hover:translate-y-0'
+      } bg-gradient-to-br from-black/80 to-[#1a0000]/80 border-b border-red-900/20 backdrop-blur-md`}
     >
-      <div className="flex items-center justify-between px-6 sm:px-10 py-4 text-white uppercase text-base tracking-widest font-semibold">
+      <div className="flex items-center justify-between px-6 sm:px-10 py-4 text-white uppercase text-base tracking-widest font-semibold max-w-7xl mx-auto">
+        {/* Logo + Brand */}
         <Link to="/" className="flex items-center gap-4">
           <img
             src={logo}
@@ -39,8 +28,14 @@ const ObsidianNavbar = () => {
           </div>
         </Link>
 
+        {/* Desktop Nav Links */}
         <div className="hidden md:flex gap-10">
-          {[{ name: 'Home', path: '/' }, { name: 'Shop', path: '/shop' }, { name: 'Lookbook', path: '#' }, { name: 'Contact', path: '#' }].map((item, index) => (
+          {[
+            { name: 'Home', path: '/' },
+            { name: 'Shop', path: '/shop' },
+            { name: 'Lookbook', path: '#' },
+            { name: 'Contact', path: '#' },
+          ].map((item, index) => (
             <Link
               key={index}
               to={item.path}
@@ -52,6 +47,7 @@ const ObsidianNavbar = () => {
           ))}
         </div>
 
+        {/* Mobile Hamburger */}
         <div className="md:hidden">
           <button className="w-7 h-7 flex flex-col justify-between items-center focus:outline-none">
             <span className="w-full h-[2px] bg-white rounded" />
@@ -60,7 +56,7 @@ const ObsidianNavbar = () => {
           </button>
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 

@@ -10,24 +10,27 @@ const ObsidianNavbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY < lastScrollY) {
-        setShowNavbar(true);
+        setShowNavbar(true); // scrolling up
       } else {
-        setShowNavbar(false);
+        setShowNavbar(false); // scrolling down
       }
       setLastScrollY(window.scrollY);
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [lastScrollY]);
 
   return (
     <nav
-      className={`fixed top-6 left-1/2 transform -translate-x-1/2 w-[92%] max-w-6xl z-50 rounded-full shadow-[0_0_25px_rgba(255,0,0,0.12)] transition-transform duration-300 ${
+      className={`fixed top-0 left-0 w-full z-50 transition-transform duration-300 ${
         showNavbar ? 'translate-y-0' : '-translate-y-full'
-      } bg-gradient-to-br from-black/80 to-[#1a0000]/80 border border-red-900/20 backdrop-blur-md`}
+      } bg-gradient-to-br from-black/80 to-[#1a0000]/80 border-b border-red-900/20 backdrop-blur-md`}
     >
-      <div className="flex items-center justify-between px-6 sm:px-10 py-4 text-white uppercase text-base tracking-widest font-semibold">
+      <div className="flex items-center justify-between px-6 sm:px-10 py-4 text-white uppercase text-base tracking-widest font-semibold max-w-7xl mx-auto">
         <Link to="/" className="flex items-center gap-4">
           <img
             src={logo}

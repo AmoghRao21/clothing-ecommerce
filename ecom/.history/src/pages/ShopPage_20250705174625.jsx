@@ -70,26 +70,20 @@ const ShopPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1, duration: 0.5 }}
-            className="bg-gradient-to-br from-zinc-800 to-black rounded-2xl border border-yellow-700 p-4 hover:shadow-yellow-400/20 hover:scale-[1.02] transition-all duration-300"
           >
-            <Link to={`/product/${product.id}`}>
+            <Link
+              to={`/product/${product.id}`}
+              className="block bg-gradient-to-br from-zinc-800 to-black rounded-2xl border border-yellow-700 p-4 hover:shadow-yellow-400/20 hover:scale-[1.02] transition-all duration-300"
+            >
               <img
                 src={product.image}
                 alt={product.title}
                 className="w-full h-60 object-cover rounded-xl mb-4"
               />
+              <h3 className="text-xl font-bold mb-1 text-yellow-400">{product.title}</h3>
+              <p className="text-sm text-yellow-300 mb-2">{product.category}</p>
+              <p className="text-lg font-semibold">₹{product.price}</p>
             </Link>
-            <h3 className="text-xl font-bold mb-1 text-yellow-400">{product.title}</h3>
-            <p className="text-sm text-yellow-300 mb-2">{product.category}</p>
-            <p className="text-lg font-semibold mb-4">₹{product.price}</p>
-            <div className="flex gap-3">
-              <button className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-4 rounded-full transition-all duration-300 text-sm">
-                Add to Cart
-              </button>
-              <button className="flex-1 bg-black border border-yellow-400 hover:bg-yellow-700 hover:text-black text-yellow-400 font-semibold py-2 px-4 rounded-full transition-all duration-300 text-sm">
-                Buy Now
-              </button>
-            </div>
           </motion.div>
         ))}
       </div>
