@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import bgImage from '../assets/bg.jpeg';
-import tee1 from '../assets/Mentalty - 1.png';
-import tee2 from '../assets/Mentalty - 2.png';
-import tee3 from '../assets/Mentalty - 1.png';
-import tee4 from '../assets/Mentalty - 2.png';
+import tee1 from '../assets/T-shirt1.png';
+import tee2 from '../assets/T-shirt6.png';
+import tee3 from '../assets/T-shirt5.png';
+import tee4 from '../assets/T-shirt3.png';
 
 // 📱 Mobile detection hook
 const useIsMobile = () => {

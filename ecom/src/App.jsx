@@ -5,12 +5,14 @@ import ObsidianNavbar from "./components/Navbar";
 import WardrobeInterface from "./pages/WardrobeInterface";
 import ChooseYourVibe from "./pages/GenreSection";
 import TopSellers from "./pages/Top";
-import FitFeed from "./pages/FitFeed";
+import FitfeedApp from "./pages/FitFeed";
 import DarkELKChatbot from "./components/Chatbot";
 import TShirtCustomizer from "./pages/Customization";
 import ShopPage from "./pages/ShopPage";
 import ProductDetail from './pages/ProductDetail';
 import CartPage from "./pages/CartPage";
+import FitfeedProfile from "./pages/profile";
+import WishlistPage from "./pages/wishlist";
 
 function App() {
   return (
@@ -28,11 +30,14 @@ function App() {
             </>
           }
         />
-        <Route path="/fitfeed" element={<FitFeed />} />
+        <Route path="/fitfeed" element={<FitfeedApp />} />
         <Route path="/customization" element={<TShirtCustomizer />} />
         <Route path="/shop" element={<ShopPage />} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/cart-page" element={<CartPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/account" element={<FitfeedProfile />} />
+        <Route path="/wishlist" element={<WishlistPage />} />
+
         <Route
           path="*"
           element={<div className="text-white p-10">404 - Page Not Found</div>}

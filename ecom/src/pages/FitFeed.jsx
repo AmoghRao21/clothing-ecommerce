@@ -1,449 +1,502 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Heart, MessageCircle, Send, User, Calendar, Camera, Plus, X, Zap, Star } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Heart, MessageCircle, Share2, Plus, Home, Search, User, Bell, MoreHorizontal, Zap, TrendingUp, Flame, ShoppingBag, Palette } from 'lucide-react';
 
-const FitFeed = () => {
-  const [posts, setPosts] = useState([]);
-  const [showUploadModal, setShowUploadModal] = useState(false);
-  const [newPost, setNewPost] = useState({ image: null, imagePreview: '', caption: '' });
-  const [commentInputs, setCommentInputs] = useState({});
-  const fileInputRef = useRef(null);
+const FitfeedApp = () => {
+  const [activeTab, setActiveTab] = useState('bought');
+  const [likedPosts, setLikedPosts] = useState(new Set());
+  const [showAddPost, setShowAddPost] = useState(false);
+  const [activeNavItem, setActiveNavItem] = useState('home');
+  const [scrollY, setScrollY] = useState(0);
 
-  // Initialize with some sample data
   useEffect(() => {
-    const samplePosts = [
-      {
-        id: 1,
-        username: 'streetwear_king',
-        avatar: '🔥',
-        imageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        caption: 'New drop from Dark Elk hitting different 🔥 Mentality collection goes hard #streetwear #darkelk',
-        likes: 23,
-        likedBy: [],
-        comments: [
-          { id: 1, username: 'fashion_rebel', avatar: '⚡', text: 'This fit is insane bro! 🔥🔥' },
-          { id: 2, username: 'style_maven', avatar: '🌟', text: 'Need that hoodie ASAP' }
-        ],
-        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-        trending: true
-      },
-      {
-        id: 2,
-        username: 'urban_aesthetics',
-        avatar: '🌟',
-        imageUrl: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        caption: 'Mentality tee with the vintage wash 🖤 Premium streetwear hits different #mentalitybrand',
-        likes: 41,
-        likedBy: [],
-        comments: [
-          { id: 1, username: 'drip_check', avatar: '💧', text: 'Color combo is perfect!' },
-        ],
-        timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000),
-        trending: false
-      },
-      {
-        id: 3,
-        username: 'fit_curator',
-        avatar: '👑',
-        imageUrl: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        caption: 'Layering game strong with this Dark Elk piece 💪 Black on black never fails',
-        likes: 67,
-        likedBy: ['currentUser'],
-        comments: [],
-        timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000),
-        trending: true
-      }
-    ];
-    setPosts(samplePosts);
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setNewPost(prev => ({
-          ...prev,
-          image: file,
-          imagePreview: event.target.result
-        }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handlePostSubmit = () => {
-    if (!newPost.imagePreview || !newPost.caption) return;
-
-    const post = {
-      id: Date.now(),
-      username: 'you',
-      avatar: '🚀',
-      imageUrl: newPost.imagePreview,
-      caption: newPost.caption,
-      likes: 0,
-      likedBy: [],
-      comments: [],
-      timestamp: new Date(),
+  const boughtTeePosts = [
+    {
+      id: 1,
+      user: { name: 'alex_streetwear', avatar: '/api/placeholder/40/40', verified: true },
+      timeAgo: '2h ago',
+      image: '/api/placeholder/400/500',
+      caption: 'This piece is absolutely INSANE 🔥 The quality hits different when you know you know 💯',
+      likes: 2347,
+      comments: 142,
+      trending: true
+    },
+    {
+      id: 2,
+      user: { name: 'maya_aesthetic', avatar: '/api/placeholder/40/40', verified: true },
+      timeAgo: '4h ago',
+      image: '/api/placeholder/400/600',
+      caption: 'Oversized energy >>> Everything else. This fit is pure vibes ✨🖤',
+      likes: 1892,
+      comments: 283,
       trending: false
-    };
+    },
+    {
+      id: 3,
+      user: { name: 'urban_prince', avatar: '/api/placeholder/40/40', verified: false },
+      timeAgo: '6h ago',
+      image: '/api/placeholder/400/550',
+      caption: 'When the fit hits different and you KNOW you\'re that person 😤💫',
+      likes: 3156,
+      comments: 419,
+      trending: true
+    }
+  ];
 
-    setPosts(prev => [post, ...prev]);
-    setNewPost({ image: null, imagePreview: '', caption: '' });
-    setShowUploadModal(false);
-  };
+  const customDesignPosts = [
+    {
+      id: 4,
+      user: { name: 'designer_nova', avatar: '/api/placeholder/40/40', verified: true },
+      timeAgo: '1h ago',
+      image: '/api/placeholder/400/500',
+      caption: 'Just dropped this custom piece and I\'m OBSESSED 🎨✨ Who else needs this energy?',
+      likes: 4312,
+      comments: 667,
+      trending: true
+    },
+    {
+      id: 5,
+      user: { name: 'creative_waves', avatar: '/api/placeholder/40/40', verified: true },
+      timeAgo: '3h ago',
+      image: '/api/placeholder/400/600',
+      caption: 'Minimalist but make it LOUD. This custom is speaking my language 🗣️🔥',
+      likes: 2780,
+      comments: 345,
+      trending: false
+    }
+  ];
 
   const handleLike = (postId) => {
-    setPosts(prev => prev.map(post => {
-      if (post.id === postId) {
-        const isLiked = post.likedBy.includes('currentUser');
-        return {
-          ...post,
-          likes: isLiked ? post.likes - 1 : post.likes + 1,
-          likedBy: isLiked 
-            ? post.likedBy.filter(user => user !== 'currentUser')
-            : [...post.likedBy, 'currentUser']
-        };
+    setLikedPosts(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(postId)) {
+        newSet.delete(postId);
+      } else {
+        newSet.add(postId);
       }
-      return post;
-    }));
+      return newSet;
+    });
   };
 
-  const handleComment = (postId) => {
-    const commentText = commentInputs[postId]?.trim();
-    if (!commentText) return;
-
-    const newComment = {
-      id: Date.now(),
-      username: 'you',
-      avatar: '🚀',
-      text: commentText
-    };
-
-    setPosts(prev => prev.map(post => 
-      post.id === postId 
-        ? { ...post, comments: [...post.comments, newComment] }
-        : post
-    ));
-
-    setCommentInputs(prev => ({ ...prev, [postId]: '' }));
-  };
-
-  const formatTimeAgo = (timestamp) => {
-    const now = new Date();
-    const diff = now - timestamp;
-    const minutes = Math.floor(diff / 60000);
-    const hours = Math.floor(diff / 3600000);
-    const days = Math.floor(diff / 86400000);
-
-    if (minutes < 60) return `${minutes}m`;
-    if (hours < 24) return `${hours}h`;
-    return `${days}d`;
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-1 h-1 bg-red-500 rounded-full animate-bounce"></div>
-        <div className="absolute bottom-40 left-1/4 w-1.5 h-1.5 bg-blue-400 rounded-full animate-ping"></div>
-        <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
-      </div>
-
-      {/* Header - Optimized with better spacing and visibility */}
-      <div className="sticky top-0 bg-gradient-to-r from-black via-gray-900 to-black backdrop-blur-xl border-b border-yellow-400/30 z-50 shadow-lg shadow-black/50">
-        <div className="max-w-4xl mx-auto px-4 py-4 md:py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-xl flex items-center justify-center transform rotate-12 shadow-lg shadow-yellow-400/30">
-                <span className="text-black text-xl md:text-2xl">🔥</span>
+  const PostCard = ({ post }) => (
+    <div className="relative group mb-8 w-full max-w-md mx-auto">
+      {/* Trending Badge */}
+      {post.trending && (
+        <div className="absolute -top-2 -right-2 z-10 bg-gradient-to-r from-yellow-400 via-orange-500 to-amber-600 rounded-full p-2 shadow-lg animate-pulse">
+          <TrendingUp className="w-4 h-4 text-white" />
+        </div>
+      )}
+      
+      <div className="bg-gradient-to-br from-gray-900/90 to-black/90 backdrop-blur-xl rounded-3xl overflow-hidden border border-gray-800/50 shadow-2xl group-hover:shadow-yellow-500/20 transition-all duration-500 group-hover:scale-[1.02] group-hover:border-yellow-500/30">
+        
+        {/* User Header with Glassmorphism */}
+        <div className="relative p-6 pb-4">
+          <div className="absolute inset-0 bg-gradient-to-r from-yellow-600/10 via-orange-600/10 to-amber-600/10 backdrop-blur-sm" />
+          <div className="relative flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="relative">
+                <img 
+                  src={post.user.avatar} 
+                  alt={post.user.name}
+                  className="w-12 h-12 rounded-full object-cover border-2 border-gradient-to-r from-yellow-500 to-orange-500 shadow-lg"
+                />
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
               </div>
               <div>
-                <h1 className="text-2xl md:text-3xl font-black bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-lg">
-                  FITFEED
-                </h1>
-                <p className="text-xs text-gray-300 font-medium tracking-wide">WHERE STYLE MEETS STREET</p>
+                <div className="flex items-center space-x-2">
+                  <h3 className="font-black text-white text-lg bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                    {post.user.name}
+                  </h3>
+
+                </div>
+                <p className="text-gray-400 text-sm font-medium">{post.timeAgo}</p>
               </div>
+            </div>
+            <MoreHorizontal className="w-6 h-6 text-gray-400 hover:text-white transition-colors cursor-pointer" />
+          </div>
+        </div>
+
+        {/* Post Image with Overlay Effects */}
+        <div className="relative overflow-hidden">
+          <img 
+            src={post.image} 
+            alt="Post"
+            className="w-full h-96 object-cover group-hover:scale-105 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+          <div className="absolute bottom-4 left-4 right-4">
+            <div className="bg-black/40 backdrop-blur-md rounded-2xl p-4 border border-white/10">
+              <p className="text-white font-semibold text-lg leading-tight">
+                {post.caption}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Bar with Gold Effects */}
+        <div className="p-6 pt-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-6">
+              <button 
+                onClick={() => handleLike(post.id)}
+                className="group/like relative overflow-hidden"
+              >
+                <Heart 
+                  className={`w-8 h-8 transition-all duration-300 ${
+                    likedPosts.has(post.id) 
+                      ? 'fill-red-500 text-red-500 scale-125 drop-shadow-lg' 
+                      : 'text-gray-300 hover:text-red-500 group-hover/like:scale-125'
+                  }`}
+                />
+                {likedPosts.has(post.id) && (
+                  <div className="absolute inset-0 bg-red-500 rounded-full blur-lg opacity-30 scale-150 animate-pulse" />
+                )}
+              </button>
+              
+              <button className="group/comment">
+                <MessageCircle className="w-8 h-8 text-gray-300 hover:text-blue-500 group-hover/comment:scale-125 transition-all duration-300" />
+              </button>
+              
+              <button className="group/share">
+                <Share2 className="w-8 h-8 text-gray-300 hover:text-green-500 group-hover/share:scale-125 transition-all duration-300" />
+              </button>
+              
+              <button className="group/fire">
+                <Flame className="w-8 h-8 text-gray-300 hover:text-orange-500 group-hover/fire:scale-125 transition-all duration-300" />
+              </button>
+            </div>
+          </div>
+
+          {/* Engagement Stats with Glow */}
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+              <span className="text-white font-bold text-lg">
+                {(post.likes + (likedPosts.has(post.id) ? 1 : 0)).toLocaleString()}
+              </span>
+              <span className="text-gray-400 text-sm">likes</span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="px-3 py-1 bg-gradient-to-r from-yellow-400/20 to-orange-500/20 rounded-full border border-yellow-400/40 backdrop-blur-sm">
-                <div className="flex items-center space-x-1">
-                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                  <span className="text-xs font-bold text-yellow-400">LIVE</span>
-                </div>
-              </div>
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+              <span className="text-white font-bold text-lg">{post.comments.toLocaleString()}</span>
+              <span className="text-gray-400 text-sm">comments</span>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  );
 
-      {/* Main Content - Added proper padding to prevent navbar overlap */}
-      <div className="max-w-4xl mx-auto px-4 pt-8 pb-24">
-        {/* Trending Section */}
-        <div className="mb-8">
-          <div className="flex items-center space-x-2 mb-6">
-            <Zap className="text-yellow-400" size={20} />
-            <h2 className="text-xl font-bold text-white">Trending Fits</h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-yellow-400/50 to-transparent"></div>
-          </div>
-        </div>
-
-        {/* Posts Feed */}
-        <div className="grid gap-8 lg:grid-cols-2">
-          {posts.map((post, index) => (
-            <div
-              key={post.id}
-              className={`group relative bg-gradient-to-br from-gray-900/90 via-gray-800/70 to-gray-900/90 backdrop-blur-sm rounded-2xl overflow-hidden border transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-yellow-400/10 ${
-                post.trending 
-                  ? 'border-yellow-400/40 shadow-lg shadow-yellow-400/20' 
-                  : 'border-gray-700/50'
-              }`}
-              style={{
-                animation: `fadeInUp 0.8s ease-out ${index * 0.15}s both`
-              }}
+  const AddPostModal = () => (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-2xl z-50 flex items-end animate-fadeIn">
+      <div className="bg-gradient-to-t from-gray-900 to-black rounded-t-3xl w-full max-h-[85vh] overflow-y-auto border-t border-gray-700/50 shadow-2xl">
+        <div className="p-8">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-black bg-gradient-to-r from-yellow-400 via-orange-500 to-amber-600 bg-clip-text text-transparent">
+              Create Magic ✨
+            </h2>
+            <button 
+              onClick={() => setShowAddPost(false)}
+              className="w-10 h-10 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-all duration-300 hover:scale-110"
             >
-              {/* Trending Badge */}
-              {post.trending && (
-                <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-400/30">
-                  <div className="flex items-center space-x-1">
-                    <span className="text-black text-xs">🔥</span>
-                    <span className="text-xs font-bold text-black">TRENDING</span>
-                  </div>
-                </div>
-              )}
-
-              {/* Post Header */}
-              <div className="flex items-center justify-between p-6 pb-4">
-                <div className="flex items-center space-x-4">
-                  <div className="relative">
-                    <div className="w-12 h-12 bg-gradient-to-br from-gray-700 to-gray-800 rounded-full flex items-center justify-center text-xl border-2 border-gray-600 shadow-lg">
-                      {post.avatar}
-                    </div>
-                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-900 shadow-sm"></div>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-white text-lg">@{post.username}</h3>
-                    <div className="flex items-center space-x-2 text-gray-400 text-sm">
-                      <Calendar size={12} />
-                      <span>{formatTimeAgo(post.timestamp)}</span>
-                      {post.trending && (
-                        <>
-                          <span>•</span>
-                          <Star size={12} className="text-yellow-400" />
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Post Image */}
-              <div className="relative mx-6 mb-4">
-                <div className="relative overflow-hidden rounded-xl shadow-lg">
-                  <img
-                    src={post.imageUrl}
-                    alt="Outfit post"
-                    className="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-105"
-                    onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/400x320/1a1a1a/yellow?text=Style+Loading...';
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-              </div>
-
-              {/* Post Content */}
-              <div className="px-6 pb-6">
-                <p className="text-gray-200 mb-6 leading-relaxed text-base">{post.caption}</p>
-
-                {/* Action Buttons */}
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center space-x-6">
-                    <button
-                      onClick={() => handleLike(post.id)}
-                      className="flex items-center space-x-2 group/like transition-transform duration-200 hover:scale-110"
-                    >
-                      <div className="relative">
-                        <Heart
-                          size={28}
-                          className={`transition-all duration-300 ${
-                            post.likedBy.includes('currentUser')
-                              ? 'text-red-500 fill-red-500 scale-110'
-                              : 'text-gray-400 group-hover/like:text-red-500'
-                          }`}
-                        />
-                        {post.likedBy.includes('currentUser') && (
-                          <div className="absolute inset-0 animate-ping">
-                            <Heart size={28} className="text-red-500 opacity-20" />
-                          </div>
-                        )}
-                      </div>
-                      <span className="font-bold text-white text-lg">{post.likes}</span>
-                    </button>
-                    <div className="flex items-center space-x-2">
-                      <MessageCircle size={28} className="text-gray-400" />
-                      <span className="font-bold text-white text-lg">{post.comments.length}</span>
-                    </div>
-                  </div>
-                  <div className="text-xs text-gray-500 font-medium">
-                    #{post.id}
-                  </div>
-                </div>
-
-                {/* Comments Section */}
-                <div className="space-y-4 mb-4">
-                  {post.comments.map((comment) => (
-                    <div key={comment.id} className="flex space-x-3 p-3 bg-gray-800/40 rounded-lg border border-gray-700/30">
-                      <div className="w-8 h-8 bg-gradient-to-br from-gray-600 to-gray-700 rounded-full flex items-center justify-center text-sm flex-shrink-0 shadow-sm">
-                        {comment.avatar}
-                      </div>
-                      <div className="flex-1">
-                        <span className="font-bold text-yellow-400 text-sm">@{comment.username}</span>
-                        <p className="text-gray-300 text-sm mt-1">{comment.text}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Comment Input */}
-                <div className="flex items-center space-x-3 p-3 bg-gray-800/50 rounded-xl border border-gray-700/50 shadow-inner">
-                  <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-sm flex-shrink-0 shadow-sm">
-                    🚀
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Drop a comment..."
-                    value={commentInputs[post.id] || ''}
-                    onChange={(e) => setCommentInputs(prev => ({ ...prev, [post.id]: e.target.value }))}
-                    onKeyPress={(e) => e.key === 'Enter' && handleComment(post.id)}
-                    className="flex-1 bg-transparent text-white placeholder-gray-400 focus:outline-none text-sm"
-                  />
-                  <button
-                    onClick={() => handleComment(post.id)}
-                    className="p-2 text-yellow-400 hover:bg-gray-700/50 rounded-lg transition-colors duration-200"
-                  >
-                    <Send size={16} />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-
-
-        {posts.length === 0 && (
-          <div className="text-center py-20">
-            <div className="text-8xl mb-6">👗</div>
-            <h3 className="text-2xl font-bold text-white mb-4">No fits in the feed yet</h3>
-            <p className="text-gray-400 text-lg">Be the first to drop your style!</p>
-          </div>
-        )}
-      </div>
-
-      {/* Floating Upload Button */}
-      <button
-        onClick={() => setShowUploadModal(true)}
-        className="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-full shadow-2xl shadow-yellow-400/30 flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-yellow-400/50 z-40 group"
-      >
-        <Plus size={28} className="text-black transition-transform duration-300 group-hover:rotate-180" />
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 animate-ping opacity-20"></div>
-      </button>
-
-      {/* Upload Modal */}
-      {showUploadModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 max-w-md w-full border border-gray-700 relative shadow-2xl">
-            <button
-              onClick={() => setShowUploadModal(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-            >
-              <X size={24} />
+              <span className="text-white text-xl">×</span>
             </button>
-
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl mx-auto mb-4 flex items-center justify-center shadow-lg shadow-yellow-400/30">
-                <span className="text-black text-3xl">📸</span>
+          </div>
+          
+          <div className="space-y-6">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 via-orange-500 to-amber-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition-opacity duration-300" />
+              <div className="relative border-2 border-dashed border-gray-600 rounded-3xl p-12 text-center bg-gray-900/50 backdrop-blur-sm hover:border-yellow-500/50 transition-all duration-300">
+                <Plus className="w-16 h-16 text-gray-500 mx-auto mb-6 group-hover:text-yellow-500 transition-colors" />
+                <p className="text-gray-400 text-lg font-semibold">Drop your fire content here 🔥</p>
+                <p className="text-gray-500 text-sm mt-2">JPG, PNG, or GIF up to 10MB</p>
               </div>
-              <h2 className="text-2xl font-bold text-white mb-2">Share Your Fit</h2>
-              <p className="text-gray-400">Show the world your style</p>
             </div>
-
-            <div className="space-y-6">
-              {/* Image Upload */}
-              <div>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                />
-                {newPost.imagePreview ? (
-                  <div className="relative">
-                    <img
-                      src={newPost.imagePreview}
-                      alt="Preview"
-                      className="w-full h-48 object-cover rounded-xl shadow-lg"
-                    />
-                    <button
-                      onClick={() => setNewPost(prev => ({ ...prev, imagePreview: '', image: null }))}
-                      className="absolute top-2 right-2 w-8 h-8 bg-black/60 rounded-full flex items-center justify-center text-white hover:bg-black/80 transition-colors"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="w-full h-48 border-2 border-dashed border-gray-600 rounded-xl flex flex-col items-center justify-center hover:border-yellow-400 transition-colors duration-300 group"
-                  >
-                    <span className="text-gray-400 text-4xl mb-3">📸</span>
-                    <span className="text-gray-400 group-hover:text-yellow-400 font-medium">
-                      Click to upload your fit
-                    </span>
-                  </button>
-                )}
-              </div>
-
-              {/* Caption Input */}
-              <div>
-                <textarea
-                  placeholder="Describe your fit, tag brands, add hashtags..."
-                  value={newPost.caption}
-                  onChange={(e) => setNewPost(prev => ({ ...prev, caption: e.target.value }))}
-                  className="w-full bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent resize-none shadow-inner"
-                  rows="4"
-                />
-              </div>
-
-              {/* Submit Button */}
-              <button
-                onClick={handlePostSubmit}
-                disabled={!newPost.imagePreview || !newPost.caption}
-                className="w-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-black font-bold py-4 px-6 rounded-xl hover:shadow-lg hover:shadow-yellow-400/30 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-lg"
-              >
-                POST YOUR FIT 🔥
+            
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl blur opacity-20" />
+              <textarea 
+                placeholder="What's the vibe? Tell your story..."
+                className="relative w-full bg-gray-900/80 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 text-white placeholder-gray-500 resize-none h-32 font-medium text-lg focus:border-yellow-500/50 focus:outline-none transition-all duration-300"
+              />
+            </div>
+            
+            <div className="flex space-x-4">
+              <button className="flex-1 relative group overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl" />
+                <div className="relative bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white py-4 rounded-2xl font-black text-lg transition-all duration-300 group-hover:scale-105">
+                  🛍️ Bought Tee
+                </div>
+              </button>
+              <button className="flex-1 relative group overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-2xl" />
+                <div className="relative bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-white py-4 rounded-2xl font-black text-lg transition-all duration-300 group-hover:scale-105">
+                  🎨 My Design
+                </div>
               </button>
             </div>
           </div>
         </div>
-      )}
+      </div>
+    </div>
+  );
 
+  return (
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-yellow-900/10 via-black to-orange-900/10" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(251,191,36,0.1),transparent_50%)]" />
+      
+      {/* Desktop Layout */}
+      <div className="hidden lg:flex min-h-screen">
+        {/* Left Sidebar Navigation */}
+        <div className="w-80 fixed left-0 top-0 h-full backdrop-blur-2xl bg-black/80 border-r border-gray-800/50 z-40">
+          <div className="p-8">
+            <div className="mb-12">
+              <h1 className="text-3xl font-black bg-gradient-to-r from-yellow-400 via-orange-500 to-amber-600 bg-clip-text text-transparent">
+                FitFeed
+              </h1>
+            </div>
+            
+            {/* Professional Tab Selection */}
+            <div className="space-y-4 mb-12">
+              <div className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-6">
+                Categories
+              </div>
+              
+              <button
+                onClick={() => setActiveTab('bought')}
+                className={`w-full group relative overflow-hidden rounded-2xl transition-all duration-300 ${
+                  activeTab === 'bought' 
+                    ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 border-2 border-amber-500/30' 
+                    : 'bg-gray-800/30 border-2 border-gray-700/30 hover:border-amber-500/20'
+                }`}
+              >
+                <div className="p-6 flex items-center space-x-4">
+                  <div className={`p-3 rounded-xl ${
+                    activeTab === 'bought' 
+                      ? 'bg-gradient-to-r from-amber-500 to-orange-500' 
+                      : 'bg-gray-700 group-hover:bg-gray-600'
+                  } transition-all duration-300`}>
+                    <ShoppingBag className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <h3 className={`font-bold text-lg ${
+                      activeTab === 'bought' 
+                        ? 'text-white' 
+                        : 'text-gray-300 group-hover:text-white'
+                    }`}>
+                      Bought Tees
+                    </h3>
+                    <p className="text-sm text-gray-400">Premium streetwear collection</p>
+                  </div>
+                </div>
+                {activeTab === 'bought' && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-8 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full" />
+                )}
+              </button>
+              
+              <button
+                onClick={() => setActiveTab('designs')}
+                className={`w-full group relative overflow-hidden rounded-2xl transition-all duration-300 ${
+                  activeTab === 'designs' 
+                    ? 'bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border-2 border-yellow-500/30' 
+                    : 'bg-gray-800/30 border-2 border-gray-700/30 hover:border-yellow-500/20'
+                }`}
+              >
+                <div className="p-6 flex items-center space-x-4">
+                  <div className={`p-3 rounded-xl ${
+                    activeTab === 'designs' 
+                      ? 'bg-gradient-to-r from-yellow-500 to-amber-500' 
+                      : 'bg-gray-700 group-hover:bg-gray-600'
+                  } transition-all duration-300`}>
+                    <Palette className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <h3 className={`font-bold text-lg ${
+                      activeTab === 'designs' 
+                        ? 'text-white' 
+                        : 'text-gray-300 group-hover:text-white'
+                    }`}>
+                      My Designs
+                    </h3>
+                    <p className="text-sm text-gray-400">Custom creative expressions</p>
+                  </div>
+                </div>
+                {activeTab === 'designs' && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-8 bg-gradient-to-b from-yellow-500 to-amber-500 rounded-full" />
+                )}
+              </button>
+            </div>
+            
+            {/* Navigation Items */}
+            <div className="space-y-2">
+              <div className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-6">
+                Navigation
+              </div>
+              
+              {[
+                { icon: Home, key: 'home', label: 'Home' },
+                { icon: Search, key: 'explore', label: 'Explore' },
+                { icon: User, key: 'profile', label: 'Profile' },
+                { icon: Bell, key: 'notifications', label: 'Notifications' }
+              ].map(({ icon: Icon, key, label }) => (
+                <button
+                  key={key}
+                  onClick={() => setActiveNavItem(key)}
+                  className={`w-full p-4 rounded-xl transition-all duration-300 flex items-center space-x-4 ${
+                    activeNavItem === key 
+                      ? 'bg-gradient-to-r from-yellow-500/20 to-amber-500/20 text-white border border-yellow-500/30' 
+                      : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                  }`}
+                >
+                  <Icon className="w-6 h-6" />
+                  <span className="font-semibold">{label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        {/* Main Content */}
+        <div className="flex-1 ml-80">
+          <div className="max-w-2xl mx-auto px-6 py-8">
+            {activeTab === 'bought' 
+              ? boughtTeePosts.map(post => <PostCard key={post.id} post={post} />)
+              : customDesignPosts.map(post => <PostCard key={post.id} post={post} />)
+            }
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Layout */}
+      <div className="lg:hidden">
+        {/* Mobile Tabs */}
+        <div className="sticky top-0 z-30 backdrop-blur-2xl bg-black/80 border-b border-gray-800/30">
+          <div className="flex px-4 py-3">
+            <button
+              onClick={() => setActiveTab('bought')}
+              className={`flex-1 relative overflow-hidden rounded-2xl transition-all duration-300 ${
+                activeTab === 'bought' 
+                  ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 border-2 border-amber-500/40' 
+                  : 'bg-gray-800/30 border-2 border-gray-700/30'
+              }`}
+            >
+              <div className="p-4 flex items-center justify-center space-x-2">
+                <ShoppingBag className={`w-5 h-5 ${
+                  activeTab === 'bought' ? 'text-amber-400' : 'text-gray-400'
+                }`} />
+                <span className={`font-bold ${
+                  activeTab === 'bought' ? 'text-white' : 'text-gray-400'
+                }`}>
+                  Bought Tees
+                </span>
+              </div>
+            </button>
+            
+            <div className="w-3" />
+            
+            <button
+              onClick={() => setActiveTab('designs')}
+              className={`flex-1 relative overflow-hidden rounded-2xl transition-all duration-300 ${
+                activeTab === 'designs' 
+                  ? 'bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border-2 border-yellow-500/40' 
+                  : 'bg-gray-800/30 border-2 border-gray-700/30'
+              }`}
+            >
+              <div className="p-4 flex items-center justify-center space-x-2">
+                <Palette className={`w-5 h-5 ${
+                  activeTab === 'designs' ? 'text-yellow-400' : 'text-gray-400'
+                }`} />
+                <span className={`font-bold ${
+                  activeTab === 'designs' ? 'text-white' : 'text-gray-400'
+                }`}>
+                  My Designs
+                </span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Feed */}
+        <div className="px-4 py-6 pb-32">
+          {activeTab === 'bought' 
+            ? boughtTeePosts.map(post => <PostCard key={post.id} post={post} />)
+            : customDesignPosts.map(post => <PostCard key={post.id} post={post} />)
+          }
+        </div>
+
+        {/* Mobile Bottom Navigation */}
+        <div className="fixed bottom-0 left-0 right-0 z-40 backdrop-blur-2xl bg-black/90 border-t border-gray-800/50 safe-area-inset-bottom">
+          <div className="relative px-4 py-3">
+            <div className="absolute inset-0 bg-gradient-to-r from-yellow-600/10 via-orange-600/10 to-amber-600/10" />
+            <div className="relative flex items-center justify-around">
+              {[
+                { icon: Home, key: 'home', label: 'Home' },
+                { icon: Search, key: 'explore', label: 'Explore' },
+                { icon: Plus, key: 'add', label: 'Add' },
+                { icon: User, key: 'profile', label: 'Profile' }
+              ].map(({ icon: Icon, key, label }) => (
+                <button
+                  key={key}
+                  onClick={() => key === 'add' ? setShowAddPost(true) : setActiveNavItem(key)}
+                  className={`relative p-3 rounded-2xl transition-all duration-300 flex flex-col items-center ${
+                    activeNavItem === key 
+                      ? 'text-white scale-110' 
+                      : 'text-gray-400 hover:text-white hover:scale-105'
+                  }`}
+                >
+                  {activeNavItem === key && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl blur-lg opacity-30" />
+                  )}
+                  <Icon className="w-6 h-6 relative z-10 mb-1" />
+                  <span className="text-xs font-medium relative z-10">
+                    {label}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Floating Action Button */}
+      <button
+        onClick={() => setShowAddPost(true)}
+        className="fixed bottom-24 right-6 lg:bottom-8 w-16 h-16 rounded-full overflow-hidden group z-30"
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-500 to-amber-600 animate-spin-slow" />
+        <div className="absolute inset-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-2xl">
+          <Plus className="w-8 h-8 text-white" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-300 scale-150" />
+      </button>
+
+      {/* Add Post Modal */}
+      {showAddPost && <AddPostModal />}
+      
       <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px) scale(0.95);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out;
+        }
+        .animate-spin-slow {
+          animation: spin-slow 3s linear infinite;
         }
       `}</style>
     </div>
   );
 };
 
-export default FitFeed;
+export default FitfeedApp;
